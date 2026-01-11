@@ -17,7 +17,6 @@
       --success: #22c55e;
     }
 
-    /* Full Light Theme Color Overrides */
     body.light-theme {
       --bg-dark: #f1f5f9;
       --card-bg: #ffffff;
@@ -29,97 +28,49 @@
 
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
     
-    body { 
-      background-color: var(--bg-dark); 
-      color: var(--text-main); 
-      display: flex; 
-      justify-content: center; 
-      padding: 40px 20px; 
-      min-height: 100vh; 
-      transition: background-color 0.3s, color 0.3s; 
-    }
+    body { background-color: var(--bg-dark); color: var(--text-main); display: flex; justify-content: center; padding: 20px; min-height: 100vh; transition: 0.3s; }
     
-    .dashboard { 
-      width: 100%; 
-      max-width: 1150px; 
-      background: var(--card-bg); 
-      border: 1px solid var(--border); 
-      border-radius: 20px; 
-      padding: 40px; 
-      box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); 
-      transition: background 0.3s, border 0.3s;
-    }
+    .dashboard { width: 100%; max-width: 1150px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 20px; padding: 30px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); }
     
-    header { 
-      display: flex; 
-      justify-content: space-between; 
-      align-items: center; 
-      margin-bottom: 30px; 
-      border-bottom: 1px solid var(--border); 
-      padding-bottom: 20px; 
-    }
+    header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; border-bottom: 1px solid var(--border); padding-bottom: 20px; flex-wrap: wrap; gap: 15px; }
     
     .header-controls { display: flex; gap: 10px; align-items: center; }
 
     h1 { font-size: 24px; letter-spacing: -0.5px; }
-    h1 a { color: inherit; text-decoration: none; display: flex; align-items: center; gap: 10px; transition: color 0.3s; }
+    h1 a { color: inherit; text-decoration: none; display: flex; align-items: center; gap: 10px; }
     h1 span { color: var(--primary); }
 
-    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 25px; }
-    .input-group { display: flex; flex-direction: column; gap: 8px; position: relative; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; margin-bottom: 25px; }
+    .input-group { display: flex; flex-direction: column; gap: 8px; position: relative; width: 100%; }
     
-    label { 
-      font-size: 11px; 
-      font-weight: 700; 
-      color: var(--text-gray); 
-      text-transform: uppercase; 
-      letter-spacing: 0.1em; 
-      transition: color 0.3s;
-    }
+    label { font-size: 11px; font-weight: 700; color: var(--text-gray); text-transform: uppercase; letter-spacing: 0.1em; }
 
-    input, select, textarea { 
-      background: var(--input-bg); 
-      border: 1px solid var(--border); 
-      color: var(--text-main); 
-      padding: 12px 16px; 
-      border-radius: 10px; 
-      font-size: 14px; 
-      transition: 0.2s;
-    }
+    input, select, textarea { background: var(--input-bg); border: 1px solid var(--border); color: var(--text-main); padding: 12px 16px; border-radius: 10px; font-size: 14px; transition: 0.2s; appearance: none; width: 100%; }
+    select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2394a3b8'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 1rem center; background-size: 1rem; padding-right: 2.5rem; }
 
     input[readonly] { background: rgba(100, 100, 100, 0.1); color: var(--text-gray); cursor: not-allowed; }
 
-    .btn-theme { background: transparent; border: 1px solid var(--border); font-size: 18px; padding: 5px 12px; border-radius: 8px; cursor: pointer; color: var(--text-main); }
-    .btn-reset { background: transparent; border: 1px solid var(--danger); color: var(--danger); font-size: 12px; padding: 6px 15px; border-radius: 8px; cursor: pointer; font-weight: 600; transition: 0.2s; }
-    .btn-reset:hover { background: var(--danger); color: white; }
-
-    .edit-link { position: absolute; right: 10px; top: 32px; font-size: 11px; color: var(--primary); cursor: pointer; display: none; font-weight: bold; }
+    .edit-link { position: absolute; right: 10px; top: 32px; font-size: 11px; color: var(--primary); cursor: pointer; display: none; font-weight: bold; z-index: 5; }
     
     .btn { cursor: pointer; border-radius: 10px; font-weight: 700; border: none; display: flex; align-items: center; justify-content: center; gap: 10px; transition: 0.2s; }
     .btn-main { background: var(--primary); color: white; width: 100%; padding: 16px; font-size: 16px; margin-top: 10px; }
-    .btn-main:hover { background: #4f46e5; transform: translateY(-1px); }
+    .btn-reset { background: transparent; border: 1px solid var(--danger); color: var(--danger); font-size: 12px; padding: 6px 15px; border-radius: 8px; font-weight: 600; }
+    .btn-theme { background: transparent; border: 1px solid var(--border); font-size: 18px; padding: 5px 12px; border-radius: 8px; color: var(--text-main); cursor: pointer;}
 
-    .ti-results { margin-top: 25px; display: none; }
-    .ti-item { background: rgba(0,0,0,0.05); border-left: 4px solid var(--primary); padding: 12px; border-radius: 8px; margin-bottom: 10px; font-size: 13px; color: var(--text-main); }
+    #loading { display: none; flex-direction: column; align-items: center; gap: 15px; margin: 30px 0; }
+    .scanner-bar { width: 100%; max-width: 400px; height: 4px; background: var(--border); border-radius: 10px; position: relative; overflow: hidden; }
+    .scanner-bar::after { content: ""; width: 80px; height: 100%; background: var(--primary); position: absolute; left: -80px; animation: scan 1.8s infinite linear; box-shadow: 0 0 15px var(--primary); }
+    .loading-text { color: var(--primary); font-weight: bold; font-size: 12px; text-transform: uppercase; letter-spacing: 2px; animation: pulse 1.5s infinite; }
+
+    @keyframes scan { 0% { left: -80px; } 100% { left: 100%; } }
+    @keyframes pulse { 0%, 100% { opacity: 0.4; } 50% { opacity: 1; } }
 
     .report-area { margin-top: 30px; display: none; }
-    .report-content { 
-      background: rgba(0,0,0,0.05); 
-      border: 1px solid var(--border); 
-      border-radius: 12px; 
-      padding: 25px; 
-      white-space: pre-wrap; 
-      font-family: 'Fira Code', monospace; 
-      font-size: 14px; 
-      line-height: 1.6; 
-      margin-bottom: 15px; 
-      color: var(--text-main); 
-    }
+    .report-content { background: rgba(0,0,0,0.05); border: 1px solid var(--border); border-radius: 12px; padding: 25px; white-space: pre-wrap; font-family: 'Fira Code', monospace; font-size: 14px; line-height: 1.6; color: var(--text-main); overflow-x: auto; }
     
-    #loading { display: none; text-align: center; margin: 20px 0; color: var(--primary); font-weight: bold; }
-    
-    footer { margin-top: 40px; text-align: center; font-size: 12px; color: var(--text-gray); border-top: 1px solid var(--border); padding-top: 20px; transition: color 0.3s; }
-    footer a { color: var(--primary); text-decoration: none; font-weight: bold; }
+    .ti-results { margin-top: 15px; display: none; padding: 15px; background: rgba(239, 68, 68, 0.1); border-left: 4px solid var(--danger); border-radius: 8px; font-size: 13px; }
+
+    footer { margin-top: 40px; text-align: center; font-size: 12px; color: var(--text-gray); border-top: 1px solid var(--border); padding-top: 20px; }
   </style>
 </head>
 <body>
@@ -128,12 +79,12 @@
   <header>
     <h1><a href="https://maveera.github.io/SOC-Incident-Analysis/" target="_blank">🛡️ SOC <span>Intelligence</span> Console</a></h1>
     <div class="header-controls">
-      <button class="btn-reset" title="Clear logs and reports" onclick="resetConsole()">Reset Console</button>
-      <button class="btn-theme" id="themeToggle" title="Switch Theme">☀️</button>
+      <button class="btn-reset" onclick="resetConsole()">Reset Console</button>
+      <button class="btn-theme" id="themeToggle">☀️</button>
     </div>
   </header>
 
-  <label style="margin-bottom:10px; display:block">🔐 AI Key</label>
+  <label style="margin-bottom:10px; display:block">🔐 AI Keys & Personnel</label>
   <div class="grid">
     <div class="input-group">
       <label>(Gemini/ChatGPT)</label>
@@ -141,19 +92,24 @@
       <span id="editAi" class="edit-link" onclick="unlockKey('aiKey')">Edit</span>
     </div>
     <div class="input-group">
-      <label>AbuseIPDB Key</label>
-      <input id="abuseKey" type="password" placeholder="Optional TI Key">
-      <span id="editAbuse" class="edit-link" onclick="unlockKey('abuseKey')">Edit</span>
+      <label>Customer Name</label>
+      <input id="customerName" type="text" placeholder="e.g. Anand">
     </div>
     <div class="input-group">
-      <label>VirusTotal Key</label>
-      <input id="vtKey" type="password" placeholder="Optional TI Key">
-      <span id="editVt" class="edit-link" onclick="unlockKey('vtKey')">Edit</span>
+      <label>Analyst Name</label>
+      <input id="analystName" type="text" placeholder="Your Name">
     </div>
     <div class="input-group">
-      <label>AlienVault Key</label>
-      <input id="otxKey" type="password" placeholder="Optional TI Key">
-      <span id="editOtx" class="edit-link" onclick="unlockKey('otxKey')">Edit</span>
+      <label>IT Keys (Optional)</label>
+      <div style="display:flex; gap:5px;">
+        <input id="tiKey" type="password" placeholder="Optional Key & Enter" style="flex:1">
+        <select id="tiProvider" style="width: 120px;">
+            <option value="abuseipdb">AbuseIPDB</option>
+            <option value="virustotal">VirusTotal</option>
+            <option value="alienvault">AlienVault</option>
+        </select>
+      </div>
+      <span id="editTi" class="edit-link" onclick="unlockKey('tiKey')">Edit</span>
     </div>
   </div>
 
@@ -165,12 +121,9 @@
     <div class="input-group">
       <label>Model Selector</label>
       <select id="modelSelect">
-          <optgroup label="Gemini 2.5 Series">
-            <option value="models/gemini-2.5-flash">models/gemini-2.5-flash</option>
-            <option value="models/gemini-2.5-pro">models/gemini-2.5-pro</option>
-          </optgroup>
-          <optgroup label="Gemini 2.0 Series">
-            <option value="models/gemini-2.0-flash">models/gemini-2.0-flash</option>
+          <optgroup label="Gemini Series">
+            <option value="models/gemini-2.0-flash">Gemini 2.0 Flash</option>
+            <option value="models/gemini-2.5-flash">Gemini 2.5 Flash</option>
           </optgroup>
           <optgroup label="OpenAI">
             <option value="gpt-4o">gpt-4o</option>
@@ -179,169 +132,236 @@
     </div>
   </div>
 
-  <div class="input-group" style="margin-bottom:20px">
+  <div class="input-group">
     <label>Unmasked RAW Logs</label>
     <textarea id="rawLogs" placeholder="Paste full logs here..." style="min-height:220px"></textarea>
   </div>
 
   <button class="btn btn-main" onclick="runSOCEngine()">🚀 Run Analysis Engine</button>
-  <div id="loading">Drafting report...</div>
+  
+  <div id="tiSection" class="ti-results"></div>
 
-  <div class="ti-results" id="tiSection">
-    <label style="color:var(--danger); margin-bottom:10px; display:block">Threat Intel Enrichment</label>
-    <div id="tiContent"></div>
+  <div id="loading">
+    <div class="scanner-bar"></div>
+    <div class="loading-text">Protecting Data & Analyzing...</div>
   </div>
 
   <div class="report-area" id="reportSection">
     <div class="report-content" id="reportContent"></div>
-    <button class="btn btn-main" style="background:#475569" onclick="copyReport()">📋 Copy Report</button>
+    <button class="btn btn-main" style="background:#475569" id="copyBtn" onclick="copyReport()">📋 Copy Report</button>
   </div>
-
-  <footer>
-    © 2026 All Rights Reserved | <a href="https://maveera.tech" target="_blank">Maveera</a>
-  </footer>
+  <footer>© 2026  © 2026 All Rights Reserved | <a href="https://maveera.tech" target="_blank" style="color:var(--primary); text-decoration:none">Maveera</a></footer>
 </div>
 
 <script>
-/* FULL LIST OF 200+ INCIDENTS */
-const INCIDENTS = ["No logs from a device", "Multiple Logon Failures: Misc App .", "Multiple Login Failures: Net Device", "Failed VPN Logon From Outside My Country", "High Process CPU: Server", "Multiple Logon Failures: Web Server", "Server Disk Latency - Warning", "Brute Force App Login Success .", "Permitted-Traffic from Emerging Threat IP List", "UEBA AI detects unusual process stopped", "UEBA Policy detects removable media write", "Suspicious Logon Failure without following successful login", "FortiSIEM Agent Operational Error", "Multiple Logon Failures: VPN", "Server Installed Software - Change", "privilege user account modification -vip", "Multiple Logon Failures: Same Src and Dest and Multiple Accounts", "Unauthorized_Logon_to_ADCS_Servers_by_Non_Administrators", "Excessive file changes on a host: Potential Ransomware", "Server Installed Software Change", "Windows: Windows Update Error", "FortiSIEM-Agent Operational Error", "FortiGate: Config Change was Detected", "UEBA AI detects unusual file deletion", "No performance metrics from a device", "Missing a specific performance metric from a device", "UEBA AI detects unusual file reading", "Server Memory - warning", "UEBA AI detects unusual file creation", "Missing specific performance metric from a device", "Windows: AD User Enumeration", "Concurrent Failed Authentications To Same Account From Multiple Countries", "Heavy TCP Host Scan On Fixed Port", "UEBA AI detects unusual file writing", "Large-Outbound Transfer", "Windows Logging Service Shutdown", "Sudden Decrease in Reported Events From A Host", "Sudden Increase in Successful Logons To A Host", "Windows: Windows Service Terminated With Error", "Permitted Traffic from Emerging Threat IP List", "Office365 - Brute Force Login Attempts - Same User", "Server Down: No Ping Response", "UEBA AI detects unusual process created", "System Collector Event Delayed", "Multiple logon failure on privilege users", "Office365: Brute Force - Login Attempts Same Source", "Large Outbound Transfer To Outside My Country", "High Process CPU-Server", "Windows-User Account Enabled", "Multiple Logon - Failures: Misc App", "Server Memory - Critical", "Windows - User Deleted", "Windows - User Password Changed", "Windows - User Created", "Account Locked: Server", "Server Down: No Ping Response 7/19/2024", "Windows - User Added to Groups", "Windows-User Account Properties Changed", "Windows - User Removed from Groups", "Concurrent Failed Authentications To Same Account From Multiple Cities of the same Country", "Windows: NTLMv1 Logon Between Client and Server", "Multiple Logon Failures: Misc App", "UEBA Policy detects potential leaver editing a CV at work", "Server Installed Software - Change", "UEBA Policy detects ransomware file types", "UEBA AI-detects unusual file reading", "Windows-User Account Disabled", "Windows-User Password Changed", "UEBA-Policy detects potential leaver editing a CV at work", "Sudden Increase in Network Interface Traffic", "Windows User Password Changed", "Traffic to bogon networks", "Windows Groups Changed", "Permitted Traffic- from FortiGuard Malware IP List", "UEBA - AI detects unusual process created", "Brute Force Host Login Success", "Windows User Account Properties Changed", "Windows Account Unlocked", "Windows Removable Media Inserts", "Network -Intf Error Critical", "Windows User Added to Groups", "Windows User Account Enabled", "Windows: Hidden Local User Creation", "Office365: Brute Force Login Attempts - Same User", "Traffic to FortiGuard - Malware IP List", "Heavy TCP Host Scan", "UEBA AI detects unusual file renamed", "Server Disk Space - Critical", "Windows: Locked Workstation", "Windows User Created", "Brute Force - Domain Login Success", "Server CPU Critical.", "Windows: Remote Access Tool Services Have Been Installed - System", "Sudden Increase in Reported Events From A Host", "Windows: Remote Access Tool Services Have Been Installed - Security", "Windows User Removed from Groups", "Brute Force App Login Success", "Server Intf Error Critical", "UEBA Policy detects potential pirated media", "Uncommon VPN Login", "Windows: A Member Was Removed From a Security-Enabled Global Group", "Windows: Local User Creation", "UEBA AI detects unusual file download", "UEBA Policy detects suspicious applications", "Windows User Deleted", "Sudden Increase In DNS Requests From - A Specific Host", "Server Disk Latency Warning", "FortiAnalyzer: No logs received from a device in 4 hours", "Ransomware - detected on a host", "Sudden Increase in Failed Logons To A Host", "Sudden Increase in Firewall Denied Outbound Traffic To A Specific TCP/UDP port", "Windows: A Member Was Added to a Security-Enabled Global Group", "Windows User Account Disabled", "Traffic to bogon - network", "Excessive End User-DNS Queries", "Sudden Increase in Server Process Count", "Heavy UDP Port Scan: Single Host", "MS 365 Defender: Generic Alert", "Windows: Failed Logon From Public IP", "Server Intf Util Warning", "Windows: A Member Was Added-to a Security-Enabled Global Group", "Group Policy Object Created", "Windows: Possible DC Shadow Attack", "Outbound Permitted Traffic To FortiGuard Malware IP List - FortiGate FW", "Large - Outbound Transfer", "Multiple IPS-Detected Scans From Same Src", "Outbound insecure protocol traffic from non guest network detected", "Excessive Denied Connections From Same Src", "PH_RULE_O365_AddMemberToRole", "Linux: Kernel Module Modification", "UEBA AI detects unusual file upload", "Server Intf Util - Critical", "Stealth Scan - using a tool", "Large- Outbound Transfer", "Sudden Increase in Network Interface Errors", "Server Memory Critical", "Large Outbound - Transfer To Outside My Country", "Sudden Increase in Firewall Denied Inbound Traffic To A Specific TCP/UDP port", "Windows: Active Directory Replication from Non Machine Account", "ICMP Flood From Same Source", "Windows: Mimikatz DC Sync", "Network Device Down: no ping response", "Server Intf Error Warning", "User Login Success from other countries -- Application", "Windows: Application Uninstalled", "Windows: DPAPI Domain Master Key Backup Attempt", "Windows: External Disk Drive or USB Storage Device", "Linux: Setgid Bit Set via chmod", "Linux: Setuid Bit Set via chmod", "UEBA Policy detects removable media read", "Sudden Increase in User Login Volume", "Windows:Server Paging File Usage Critical", "Windows - Service Installed By Unusual Client - System", "ICMP Flood From - Same Source", "User added to Administrator Group", "Sudden Change In DNS Data Transfer Pattern From A Specific Host", "FortiGate: Admin User Deleted", "Remote Desktop traffic from Internet", "MS 365 Defender: Incident Triggered", "High Severity MS 365 Defender: Incident Triggered", "Office365: Move To Folder Inbox Rule Created", "Group - Policy Object Modified", "Heavy TCP Host Scan .", "Large Outbound - Transfer To Outside My Country", "Office365: Brute Force Login Attempts : Same User", "Windows: Add or Remove Computer from DC", "Heavy UDP Host Scan On Fixed Port", "Office365: Suspicious File Type Uploaded", "Server Intf Util Critical", "Sudden Increase in System Memory Usage", "Inbound insecure protocol traffic detected", "FortiGate: Admin User Added", "Large Inbound Transfer From Outside My Country", "Transient Windows Account Usage", "End User DNS Queries to Unauthorized DNS Servers", "Windows: Unauthorized System Time Modification", "Sudden-User Location Change", "Website access - policy violation", "AD_Group_Modification_Detected", "Account_created_by_the_Privilege_users", "License Issues", "Outbound Permitted Traffic To Emerging Threat IP List - FortiGate FW", "Sudden Increase in Outbound Firewall Aggregate Denies", "Windows: Active Directory User Backdoors", "Concurrent Successful Authentications To Same Account From Multiple Cities of the same Country", "Server Degraded: Lossy Ping Response", "Heavy TCP Port Scan: Single Destination", "High Process CPU: Network Device", "VNC traffic from Internet", "High Severity MS 365 Defender Generic Alert", "Multiple Windows Accounts Disabled by Administrator", "Office365: Mailbox SendAs or SendOnBehalf has occurred", "Office365: Set-Mailbox Forwarding Action Created", "Windows: Possible Shadow Credentials Added", "Ransomware outbreak detected", "Windows: SCM Database Handle Failure", "Server Memory Warning", "Successful Account Activity On a Prior Disabled Account", "Windows: Service Installation in Suspicious Folder", "Linux: Unusual Process Execution from Temp", "MS 365 Defender: Malware Detected", "Sudden Change In DNS -Data Transfer Pattern From A Specific Host", "Suspicious_Certificate_Template_Modifications", "Traffic to Emerging Threat-IP List", "Windows: Generic Password Dumper Activity on LSASS . cloned", "Windows: Outgoing Logon with New Credentials.", "Windows - Service Installed By Unusual Client - Security", "Windows - User Password Changed - VIP", "CheckPoint Harmony - Found Communication from an Malicious IP", "FortiGate - Admin User Added", "Office365 - Suspicious File Type Uploaded", "User added to Remote Desktop User Group", "Sudden Increase In Firewall Connections", "Azure Resource Group Deleted", "Network Device Degraded: Lossy Ping Response", "Multiple Logon Failures: Database", "Failed Account Activity On Prior Disabled Account", "Permitted Traffic from FortiGuard Malware IP List", "Outbreak: FortiManager Command Execution Vulnerability Detected on Device", "Heavy UDP Host Scan", "High Severity Inbound Permitted IPS Exploit", "DoS Attack detected by NIPS", "Office365: Strong Authentication Disabled for a User", "Server Disk Latency Critical", "SNMP Service Unavailable", "Traffic to Emerging Threat-IP List", "Windows: Tap Driver Installation", "UEBA AI detects unusual file movement", "UEBA Policy detects ransomware note", "MS 365 Defender: Suspicious Activity Detected", "Windows User Account Name Changed", "Sudden - User Location Change", "Suspicious_Certificate_Enrollment_With_Elevated_Privileges", "Suspicious - Logon Failure without following successful login", "Windows - Groups Changed", "Windows: Replay Attack Detected rule", "Brute Force - Host Logon Failure - Domain Alert"];
+const INCIDENTS = ["No logs from a device", "Multiple Logon Failures: Misc App .", "Multiple Login Failures: Net Device", "Failed VPN Logon From Outside My Country", "High Process CPU: Server", "Multiple Logon Failures: Web Server", "Server Disk Latency - Warning", "Brute Force App Login Success .", "Permitted-Traffic from Emerging Threat IP List", "UEBA AI detects unusual process stopped", "UEBA Policy detects removable media write", "Suspicious Logon Failure without following successful login", "FortiSIEM Agent Operational Error", "Multiple Logon Failures: VPN", "Server Installed Software - Change", "privilege user account modification -vip", "Multiple Logon Failures: Same Src and Dest and Multiple Accounts", "Unauthorized_Logon_to_ADCS_Servers_by_Non_Administrators", "Excessive file changes on a host: Potential Ransomware", "Server Installed Software Change", "Windows: Windows Update Error", "FortiSIEM-Agent Operational Error", "FortiGate: Config Change was Detected", "UEBA AI detects unusual file deletion", "No performance metrics from a device", "Missing a specific performance metric from a device", "UEBA AI detects unusual file reading", "Server Memory - warning", "UEBA AI detects unusual file creation", "Missing specific performance metric from a device", "Windows: AD User Enumeration", "Concurrent Failed Authentications To Same Account From Multiple Countries", "Heavy TCP Host Scan On Fixed Port", "UEBA AI detects unusual file writing", "Large-Outbound Transfer", "Windows Logging Service Shutdown", "Sudden Decrease in Reported Events From A Host", "Sudden Increase in Successful Logons To A Host", "Windows: Windows Service Terminated With Error", "Permitted Traffic from Emerging Threat IP List", "Office365 - Brute Force Login Attempts - Same User", "Server Down: No Ping Response", "UEBA AI detects unusual process created", "System Collector Event Delayed", "Multiple logon failure on privilege users", "Office365: Brute Force - Login Attempts Same Source", "Large Outbound Transfer To Outside My Country", "High Process CPU-Server", "Windows-User Account Enabled", "Multiple Logon - Failures: Misc App", "Server Memory - Critical", "Windows - User Deleted", "Windows - User Password Changed", "Windows - User Created", "Account Locked: Server", "Server Down: No Ping Response 7/19/204", "Windows - User Added to Groups", "Windows-User Account Properties Changed", "Windows - User Removed from Groups", "Concurrent Failed Authentications To Same Account From Multiple Cities of the same Country", "Windows: NTLMv1 Logon Between Client and Server", "Multiple Logon Failures: Misc App", "UEBA Policy detects potential leaver editing a CV at work", "Server Installed Software - Change", "UEBA Policy detects ransomware file types", "UEBA AI-detects unusual file reading", "Windows-User Account Disabled", "Windows-User Password Changed", "UEBA-Policy detects potential leaver editing a CV at work", "Sudden Increase in Network Interface Traffic", "Windows User Password Changed", "Traffic to bogon networks", "Windows Groups Changed", "Permitted Traffic- from FortiGuard Malware IP List", "UEBA - AI detects unusual process created", "Brute Force Host Login Success", "Windows User Account Properties Changed", "Windows Account Unlocked", "Windows Removable Media Inserts", "Network -Intf Error Critical", "Windows User Added to Groups", "Windows User Account Enabled", "Windows: Hidden Local User Creation", "Office365: Brute Force Login Attempts - Same User", "Traffic to FortiGuard - Malware IP List", "Heavy TCP Host Scan", "UEBA AI detects unusual file renamed", "Server Disk Space - Critical", "Windows: Locked Workstation", "Windows User Created", "Brute Force - Domain Login Success", "Server CPU Critical.", "Windows: Remote Access Tool Services Have Been Installed - System", "Sudden Increase in Reported Events From A Host", "Windows: Remote Access Tool Services Have Been Installed - Security", "Windows User Removed from Groups", "Brute Force App Login Success", "Server Intf Error Critical", "UEBA Policy detects potential pirated media", "Uncommon VPN Login", "Windows: A Member Was Removed From a Security-Enabled Global Group", "Windows: Local User Creation", "UEBA AI detects unusual file download", "UEBA Policy detects suspicious applications", "Windows User Deleted", "Sudden Increase In DNS Requests From - A Specific Host", "Server Disk Latency Warning", "FortiAnalyzer: No logs received from a device in 4 hours", "Ransomware - detected on a host", "Sudden Increase in Failed Logons To A Host", "Sudden Increase in Firewall Denied Outbound Traffic To A Specific TCP/UDP port", "Windows: A Member Was Added to a Security-Enabled Global Group", "Windows User Account Disabled", "Traffic to bogon - network", "Excessive End User-DNS Queries", "Sudden Increase in Server Process Count", "Heavy UDP Port Scan: Single Host", "MS 365 Defender: Generic Alert", "Windows: Failed Logon From Public IP", "Server Intf Util Warning", "Windows: A Member Was Added-to a Security-Enabled Global Group", "Group Policy Object Created", "Windows: Possible DC Shadow Attack", "Outbound Permitted Traffic To FortiGuard Malware IP List - FortiGate FW", "Large - Outbound Transfer", "Multiple IPS-Detected Scans From Same Src", "Outbound insecure protocol traffic from non guest network detected", "Excessive Denied Connections From Same Src", "PH_RULE_O365_AddMemberToRole", "Linux: Kernel Module Modification", "UEBA AI detects unusual file upload", "Server Intf Util - Critical", "Stealth Scan - using a tool", "Large- Outbound Transfer", "Sudden Increase in Network Interface Errors", "Server Memory Critical", "Large Outbound - Transfer To Outside My Country", "Sudden Increase in Firewall Denied Inbound Traffic To A Specific TCP/UDP port", "Windows: Active Directory Replication from Non Machine Account", "ICMP Flood From Same Source", "Windows: Mimikatz DC Sync", "Network Device Down: no ping response", "Server Intf Error Warning", "User Login Success from other countries -- Application", "Windows: Application Uninstalled", "Windows: DPAPI Domain Master Key Backup Attempt", "Windows: External Disk Drive or USB Storage Device", "Linux: Setgid Bit Set via chmod", "Linux: Setuid Bit Set via chmod", "UEBA Policy detects removable media read", "Sudden Increase in User Login Volume", "Windows:Server Paging File Usage Critical", "Windows - Service Installed By Unusual Client - System", "ICMP Flood From - Same Source", "User added to Administrator Group", "Sudden Change In DNS Data Transfer Pattern From A Specific Host", "FortiGate: Admin User Deleted", "Remote Desktop traffic from Internet", "MS 365 Defender: Incident Triggered", "High Severity MS 365 Defender: Incident Triggered", "Office365: Move To Folder Inbox Rule Created", "Group - Policy Object Modified", "Heavy TCP Host Scan .", "Large Outbound - Transfer To Outside My Country", "Office365: Brute Force Login Attempts : Same User", "Windows: Add or Remove Computer from DC", "Heavy UDP Host Scan On Fixed Port", "Office365: Suspicious File Type Uploaded", "Server Intf Util Critical", "Sudden Increase in System Memory Usage", "Inbound insecure protocol traffic detected", "FortiGate: Admin User Added", "Large Inbound Transfer From Outside My Country", "Transient Windows Account Usage", "End User DNS Queries to Unauthorized DNS Servers", "Windows: Unauthorized System Time Modification", "Sudden-User Location Change", "Website access - policy violation", "AD_Group_Modification_Detected", "Account_created_by_the_Privilege_users", "License Issues", "Outbound Permitted Traffic To Emerging Threat IP List - FortiGate FW", "Sudden Increase in Outbound Firewall Aggregate Denies", "Windows: Active Directory User Backdoors", "Concurrent Successful Authentications To Same Account From Multiple Cities of the same Country", "Server Degraded: Lossy Ping Response", "Heavy TCP Port Scan: Single Destination", "High Process CPU: Network Device", "VNC traffic from Internet", "High Severity MS 365 Defender Generic Alert", "Multiple Windows Accounts Disabled by Administrator", "Office365: Mailbox SendAs or SendOnBehalf has occurred", "Office365: Set-Mailbox Forwarding Action Created", "Windows: Possible Shadow Credentials Added", "Ransomware outbreak detected", "Windows: SCM Database Handle Failure", "Server Memory Warning", "Successful Account Activity On a Prior Disabled Account", "Windows: Service Installation in Suspicious Folder", "Linux: Unusual Process Execution from Temp", "MS 365 Defender: Malware Detected", "Sudden Change In DNS -Data Transfer Pattern From A Specific Host", "Suspicious_Certificate_Template_Modifications", "Traffic to Emerging Threat-IP List", "Windows: Generic Password Dumper Activity on LSASS . cloned", "Windows: Outgoing Logon with New Credentials.", "Windows - Service Installed By Unusual Client - Security", "Windows - User Password Changed - VIP", "CheckPoint Harmony - Found Communication from an Malicious IP", "FortiGate - Admin User Added", "Office365 - Suspicious File Type Uploaded", "User added to Remote Desktop User Group", "Sudden Increase In Firewall Connections", "Azure Resource Group Deleted", "Network Device Degraded: Lossy Ping Response", "Multiple Logon Failures: Database", "Failed Account Activity On Prior Disabled Account", "Permitted Traffic from FortiGuard Malware IP List", "Outbreak: FortiManager Command Execution Vulnerability Detected on Device", "Heavy UDP Host Scan", "High Severity Inbound Permitted IPS Exploit", "DoS Attack detected by NIPS", "Office365: Strong Authentication Disabled for a User", "Server Disk Latency Critical", "SNMP Service Unavailable", "Traffic to Emerging Threat-IP List", "Windows: Tap Driver Installation", "UEBA AI detects unusual file movement", "UEBA Policy detects ransomware note", "MS 365 Defender: Suspicious Activity Detected", "Windows User Account Name Changed", "Sudden - User Location Change", "Suspicious_Certificate_Enrollment_With_Elevated_Privileges", "Suspicious - Logon Failure without following successful login", "Windows - Groups Changed", "Windows: Replay Attack Detected rule", "Brute Force - Host Logon Failure - Domain Alert"];
 
-const STORAGE_KEYS = { aiKey: 'soc_ai', abuseKey: 'soc_abuse', vtKey: 'soc_vt', otxKey: 'soc_otx' };
+const STORAGE_KEYS = { aiKey: 'soc_ai', tiKey: 'soc_ti' };
+let piiStore = new Map();
 
 window.onload = () => {
   const iSelect = document.getElementById('incidentType');
   INCIDENTS.sort().forEach(i => iSelect.innerHTML += `<option value="${i}">${i}</option>`);
-  Object.keys(STORAGE_KEYS).forEach(id => loadKey(id));
+  loadKey('aiKey');
+  loadKey('tiKey');
 };
 
-/* --- THEME TOGGLE LOGIC --- */
 document.getElementById('themeToggle').onclick = () => {
-    document.body.classList.toggle('light-theme');
-    document.getElementById('themeToggle').textContent = document.body.classList.contains('light-theme') ? '🌙' : '☀️';
+  document.body.classList.toggle('light-theme');
+  document.getElementById('themeToggle').textContent = document.body.classList.contains('light-theme') ? '🌙' : '☀️';
 };
-
-/* --- RESET CONSOLE LOGIC --- */
-function resetConsole() {
-  document.getElementById('rawLogs').value = "";
-  document.getElementById('reportSection').style.display = 'none';
-  document.getElementById('tiSection').style.display = 'none';
-}
 
 function loadKey(id) {
-  const val = localStorage.getItem(STORAGE_KEYS[id]);
+  const storageKey = (id === 'aiKey') ? STORAGE_KEYS.aiKey : STORAGE_KEYS.tiKey;
+  const val = localStorage.getItem(storageKey);
   if(val) {
-    document.getElementById(id).value = val;
-    document.getElementById(id).readOnly = true;
-    const btnId = 'edit' + id.charAt(0).toUpperCase() + id.slice(1, -3);
-    if(document.getElementById(btnId)) document.getElementById(btnId).style.display = 'block';
+    const input = document.getElementById(id);
+    input.value = val;
+    input.readOnly = true;
+    const btnId = 'edit' + (id === 'aiKey' ? 'Ai' : 'Ti');
+    document.getElementById(btnId).style.display = 'block';
   }
 }
 
 function lockKey(id) {
   const input = document.getElementById(id);
-  if(input.value.trim().length > 5) {
-    localStorage.setItem(STORAGE_KEYS[id], input.value.trim());
+  const val = input.value.trim();
+  if(val.length > 5) {
+    const storageKey = (id === 'aiKey') ? STORAGE_KEYS.aiKey : STORAGE_KEYS.tiKey;
+    localStorage.setItem(storageKey, val);
     input.readOnly = true;
-    const btnId = 'edit' + id.charAt(0).toUpperCase() + id.slice(1, -3);
-    if(document.getElementById(btnId)) document.getElementById(btnId).style.display = 'block';
+    const btnId = 'edit' + (id === 'aiKey' ? 'Ai' : 'Ti');
+    document.getElementById(btnId).style.display = 'block';
   }
 }
 
 function unlockKey(id) {
-  document.getElementById(id).readOnly = false;
-  document.getElementById(id).value = "";
-  localStorage.removeItem(STORAGE_KEYS[id]);
-  const btnId = 'edit' + id.charAt(0).toUpperCase() + id.slice(1, -3);
-  if(document.getElementById(btnId)) document.getElementById(btnId).style.display = 'none';
-  document.getElementById(id).focus();
+  const input = document.getElementById(id);
+  input.readOnly = false;
+  input.value = "";
+  const storageKey = (id === 'aiKey') ? STORAGE_KEYS.aiKey : STORAGE_KEYS.tiKey;
+  localStorage.removeItem(storageKey);
+  const btnId = 'edit' + (id === 'aiKey' ? 'Ai' : 'Ti');
+  document.getElementById(btnId).style.display = 'none';
+  input.focus();
 }
 
-['aiKey', 'abuseKey', 'vtKey', 'otxKey'].forEach(id => {
+['aiKey', 'tiKey'].forEach(id => {
   document.getElementById(id).addEventListener('keydown', (e) => { if(e.key === 'Enter') lockKey(id); });
 });
+
+async function checkTI(ips) {
+    const key = document.getElementById('tiKey').value.trim();
+    const provider = document.getElementById('tiProvider').value;
+    const tiBox = document.getElementById('tiSection');
+    tiBox.innerHTML = "<strong>Threat Intel Results:</strong><br>";
+    let found = false;
+
+    if (!key || ips.length === 0) return;
+
+    for (let ip of ips) {
+        if (/^(10\.|127\.|172\.(1[6-9]|2[0-9]|3[01])\.|192\.168\.)/.test(ip)) continue;
+        try {
+            let score = "N/A", comment = "";
+            if (provider === 'abuseipdb') {
+                const res = await fetch(`https://api.abuseipdb.com/api/v2/check?ipAddress=${ip}`, {
+                    headers: { 'Key': key, 'Accept': 'application/json' }
+                });
+                const data = await res.json();
+                score = data.data.abuseConfidenceScore + "%";
+                comment = data.data.isp || "Public IP";
+            } else if (provider === 'virustotal') {
+                const res = await fetch(`https://www.virustotal.com/api/v3/ip_addresses/${ip}`, {
+                    headers: { 'x-apikey': key }
+                });
+                const data = await res.json();
+                score = data.data.attributes.last_analysis_stats.malicious + " Engines";
+            }
+            tiBox.innerHTML += `IP: ${ip} | Malicious Score: ${score} | Info: ${comment}<br>`;
+            found = true;
+        } catch (e) { console.error("TI Search Error", e); }
+    }
+    if (found) tiBox.style.display = "block";
+}
+
+function maskLogs(text) {
+  piiStore.clear();
+  let masked = text;
+  const emails = [...new Set(text.match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g) || [])];
+  emails.forEach((email, i) => { const key = `[[MASKED_EMAIL_${i}]]`; piiStore.set(key, email); masked = masked.split(email).join(key); });
+  const ips = [...new Set(text.match(/\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b/g) || [])];
+  ips.forEach((ip, i) => { const key = `[[MASKED_IP_${i}]]`; piiStore.set(key, ip); masked = masked.split(ip).join(key); });
+  return { masked, ips };
+}
+
+function unmaskReport(text) {
+  let output = text;
+  piiStore.forEach((val, key) => { output = output.split(key).join(val); });
+  return output;
+}
 
 async function runSOCEngine() {
   const logs = document.getElementById('rawLogs').value.trim();
   const rule = document.getElementById('incidentType').value;
   const aiKey = document.getElementById('aiKey').value.trim();
   const model = document.getElementById('modelSelect').value;
+  const cust = document.getElementById('customerName').value.trim() || "Customer";
+  const analyst = document.getElementById('analystName').value.trim() || "SOC Analyst";
   const loader = document.getElementById('loading');
 
-  if (!logs || !aiKey || !rule) return alert("Logs, Rule, and AI Key are mandatory.");
-  loader.style.display = 'block';
-  document.getElementById('tiSection').style.display = 'none';
+  if (!logs || !aiKey) return alert("Logs and AI Key are mandatory.");
+  loader.style.display = 'flex';
   document.getElementById('reportSection').style.display = 'none';
+  document.getElementById('tiSection').style.display = 'none';
 
-  const abuseK = document.getElementById('abuseKey').value.trim();
-  const ips = [...new Set(logs.match(/\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b/g) || [])];
+  const { masked, ips } = maskLogs(logs);
   
-  if (abuseK && ips.length > 0) {
-    const tiContent = document.getElementById('tiContent');
-    tiContent.innerHTML = "";
-    let publicFound = false;
-    for (const ip of ips) {
-      if (!/^(10|127|172\.(1[6-9]|2[0-9]|3[0-1])|192\.168)\./.test(ip)) {
-        publicFound = true;
-        try {
-          const res = await fetch(`https://api.abuseipdb.com/api/v2/check?ipAddress=${ip}`, { headers: { 'Key': abuseK, 'Accept': 'application/json' }});
-          const data = await res.json();
-          tiContent.innerHTML += `<div class="ti-item">🛡️ AbuseIPDB [${ip}]: Score ${data.data.abuseConfidenceScore}% | ISP: ${data.data.isp}</div>`;
-        } catch(e) {}
-      }
-    }
-    if(publicFound) document.getElementById('tiSection').style.display = 'block';
+  if(document.getElementById('tiKey').value.trim()) {
+    await checkTI(ips);
   }
 
-  const prompt = `Act as a SOC Analyst. Draft a technical investigation for: "${rule}".
+  const prompt = `Act as a SOC analyst. Generate a technical incident email notification.
+  Greeting: Hello ${cust},
+  Alert Title: We have received an alert titled “${rule}.” 
   
-  RULES:
-  - NO email headers (Subject, To, From, Date, Incident ID).
-  - START DIRECTLY with: "We have observed that the ${rule} incident for the user mentioned below. Attached log details for your reference."
-  
-  OUTPUT FORMAT:
-  We have observed that the ${rule} incident for the user mentioned below. Attached log details for your reference.
-  
+  Format:
   Details:
-  IP: [Extract IP]
-  User: [Extract User]
-  Domain: [Extract Domain]
-  Target Domain: [Extract Hostname]
-  
-  Observation:
-  [A technical paragraph explaining the finding based on Event IDs/Logs.]
-  
-  Remediation:
-  [Clear actionable steps.]
-  
-  Note: [Provide any specific impact related to remediation.]
+  Host Name: [Extract]
+  User: [Extract]
+  (Extract other technical details like Process, Path, etc.)
 
-  LOG DATA: ${logs.slice(0, 5000)}`;
+  Observation:
+  (Simple, technical paragraph explaining findings from logs.)
+
+  Impact:
+  (Security risk assessment)
+
+  Recommended Actions:
+  (List actionable remediation steps)
+
+  RAW Log:
+  ${logs}
+
+  Classification: [TP or FP? Explain briefly.]
+
+  Regards,
+  SOC Team
+  ${analyst}
+
+  RULES: DO NOT USE BOLD MARKDOWN (**) IN THE RESPONSE. DO NOT ADD HEADINGS LIKE "Raw Log Analysis". 
+  
+  LOG DATA FOR ANALYSIS: ${masked}`;
 
   try {
     let response;
-    if(model.startsWith('models/')) {
+    if(model.includes('models/')) {
       response = await fetch(`https://generativelanguage.googleapis.com/v1beta/${model}:generateContent?key=${aiKey}`, {
-        method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
       });
     } else {
       response = await fetch('https://api.openai.com/v1/chat/completions', {
-        method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${aiKey}` }, body: JSON.stringify({ model: model, messages: [{ role: "user", content: prompt }] })
+        method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${aiKey}` },
+        body: JSON.stringify({ model: model, messages: [{ role: "user", content: prompt }] })
       });
     }
-
+    
     const data = await response.json();
     if (!response.ok) throw new Error(data.error?.message || "API Error");
 
-    const result = model.startsWith('models/') ? data.candidates[0].content.parts[0].text : data.choices[0].message.content;
-    document.getElementById('reportContent').innerText = result;
+    let result = "";
+    if (model.includes('models/')) {
+        result = data.candidates?.[0]?.content?.parts?.[0]?.text || "No content.";
+    } else {
+        result = data.choices?.[0]?.message?.content || "No content.";
+    }
+    
+    document.getElementById('reportContent').innerText = unmaskReport(result);
     document.getElementById('reportSection').style.display = 'block';
-  } catch(e) { alert("⚠️ AI Error: " + e.message); } finally { loader.style.display = 'none'; }
+  } catch(e) { alert("Error: " + e.message); } finally { loader.style.display = 'none'; }
 }
 
-function copyReport() { navigator.clipboard.writeText(document.getElementById('reportContent').innerText); alert("Copied to clipboard!"); }
+function resetConsole() { 
+    document.getElementById('rawLogs').value = ""; 
+    document.getElementById('reportSection').style.display = 'none'; 
+    document.getElementById('tiSection').style.display = 'none'; 
+    piiStore.clear(); 
+}
+
+function copyReport() {
+    const reportContent = document.getElementById('reportContent');
+    const textArea = document.createElement("textarea");
+    textArea.value = reportContent.innerText;
+    document.body.appendChild(textArea);
+    textArea.select();
+    try {
+        document.execCommand('copy');
+        alert("Copied to clipboard!");
+    } catch (err) {
+        console.error('Copy failed', err);
+    }
+    document.body.removeChild(textArea);
+}
 </script>
 </body>
 </html>
-
-
-
