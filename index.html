@@ -1,0 +1,1237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>SOC Intelligence Console</title>
+  <style>
+    :root {
+      --primary: #6366f1;
+      --bg-dark: #0f172a;
+      --card-bg: #1e293b;
+      --text-main: #f8fafc;
+      --text-gray: #94a3b8;
+      --border: #334155;
+      --input-bg: rgba(0,0,0,0.2);
+      --danger: #ef4444;
+      --success: #22c55e;
+
+      --bot-user: rgba(99, 102, 241, 0.18);
+      --bot-agent: rgba(34, 197, 94, 0.14);
+      --bot-shadow: 0 25px 50px -12px rgba(0,0,0,0.55);
+    }
+
+    body.light-theme {
+      --bg-dark: #f1f5f9;
+      --card-bg: #ffffff;
+      --text-main: #1e293b;
+      --text-gray: #475569;
+      --border: #cbd5e1;
+      --input-bg: #f8fafc;
+
+      --bot-user: rgba(99, 102, 241, 0.12);
+      --bot-agent: rgba(34, 197, 94, 0.10);
+      --bot-shadow: 0 25px 50px -12px rgba(0,0,0,0.18);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      display: flex;
+      justify-content: center;
+      padding: 20px;
+      min-height: 100vh;
+      transition: 0.3s;
+    }
+
+    .dashboard {
+      width: 100%;
+      max-width: 1150px;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+
+    .header-controls { display: flex; gap: 10px; align-items: center; }
+
+    h1 { font-size: 24px; letter-spacing: -0.5px; }
+    h1 a { color: inherit; text-decoration: none; display: flex; align-items: center; gap: 10px; }
+    h1 span { color: var(--primary); }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 20px;
+      margin-bottom: 25px;
+    }
+
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      position: relative;
+      width: 100%;
+    }
+
+    label {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-gray);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    input, select, textarea {
+      background: var(--input-bg);
+      border: 1px solid var(--border);
+      color: var(--text-main);
+      padding: 12px 16px;
+      border-radius: 10px;
+      font-size: 14px;
+      transition: 0.2s;
+      appearance: none;
+      width: 100%;
+    }
+
+    select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2394a3b8'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 1rem center;
+      background-size: 1rem;
+      padding-right: 2.5rem;
+    }
+
+    input[readonly] {
+      background: rgba(100, 100, 100, 0.1);
+      color: var(--text-gray);
+      cursor: not-allowed;
+    }
+
+    .edit-link {
+      position: absolute;
+      right: 12px;
+      top: 34px;
+      font-size: 11px;
+      color: var(--primary);
+      cursor: pointer;
+      display: none;
+      font-weight: 800;
+      z-index: 6;
+      user-select: none;
+    }
+
+    .key-toggle {
+      position: absolute;
+      right: 52px;
+      top: 34px;
+      font-size: 11px;
+      color: var(--text-gray);
+      cursor: pointer;
+      font-weight: 800;
+      z-index: 6;
+      user-select: none;
+      display: none;
+    }
+
+    #aiKey { padding-right: 120px; }
+
+    .ti-wrap {
+      position: relative;
+      width: 100%;
+      display: flex;
+      gap: 5px;
+      align-items: center;
+    }
+
+    .ti-input-box {
+      position: relative;
+      flex: 1;
+      width: 100%;
+    }
+
+    #tiKey {
+      width: 100%;
+      padding-right: 120px;
+    }
+
+    .ti-input-box .key-toggle {
+      right: 52px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    .ti-input-box .edit-link {
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    .btn {
+      cursor: pointer;
+      border-radius: 10px;
+      font-weight: 700;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      transition: 0.2s;
+    }
+
+    .btn-main {
+      background: var(--primary);
+      color: white;
+      width: 100%;
+      padding: 16px;
+      font-size: 16px;
+      margin-top: 10px;
+    }
+
+    .btn-reset {
+      background: transparent;
+      border: 1px solid var(--danger);
+      color: var(--danger);
+      font-size: 12px;
+      padding: 6px 15px;
+      border-radius: 8px;
+      font-weight: 600;
+    }
+
+    .btn-theme {
+      background: transparent;
+      border: 1px solid var(--border);
+      font-size: 18px;
+      padding: 5px 12px;
+      border-radius: 8px;
+      color: var(--text-main);
+      cursor: pointer;
+    }
+
+    .btn-open {
+      background: transparent;
+      border: 1px solid var(--primary);
+      color: var(--primary);
+      font-size: 12px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      font-weight: 800;
+      cursor: pointer;
+      min-width: 120px;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      height: 44px;
+      white-space: nowrap;
+    }
+
+    #loading {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 15px;
+      margin: 30px 0;
+    }
+
+    .scanner-bar {
+      width: 100%;
+      max-width: 400px;
+      height: 4px;
+      background: var(--border);
+      border-radius: 10px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .scanner-bar::after {
+      content: "";
+      width: 80px;
+      height: 100%;
+      background: var(--primary);
+      position: absolute;
+      left: -80px;
+      animation: scan 1.8s infinite linear;
+      box-shadow: 0 0 15px var(--primary);
+    }
+
+    .loading-text {
+      color: var(--primary);
+      font-weight: bold;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes scan { 0% { left: -80px; } 100% { left: 100%; } }
+    @keyframes pulse { 0%, 100% { opacity: 0.4; } 50% { opacity: 1; } }
+
+    .report-area { margin-top: 30px; display: none; }
+
+    .report-content {
+      background: rgba(0,0,0,0.05);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 25px;
+      white-space: pre-wrap;
+      font-family: 'Fira Code', monospace;
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--text-main);
+      overflow-x: auto;
+    }
+
+    .ti-results {
+      margin-top: 15px;
+      display: none;
+      padding: 15px;
+      background: rgba(239, 68, 68, 0.1);
+      border-left: 4px solid var(--danger);
+      border-radius: 8px;
+      font-size: 13px;
+    }
+
+    /* =========================
+       FLOATING SOC AI AGENT UI
+       ========================= */
+    .socbot-fab {
+      position: fixed;
+      right: 22px;
+      bottom: 22px;
+      width: 58px;
+      height: 58px;
+      border-radius: 999px;
+      background: var(--primary);
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 18px 40px rgba(0,0,0,0.35);
+      z-index: 9999;
+      color: #fff;
+      font-size: 22px;
+      font-weight: 900;
+      transition: transform 0.2s ease;
+    }
+    .socbot-fab:hover { transform: translateY(-2px); }
+
+    .socbot-window {
+      position: fixed;
+      right: 22px;
+      bottom: 90px;
+      width: 420px;
+      max-width: calc(100vw - 44px);
+      height: 560px;
+      max-height: calc(100vh - 130px);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      background: var(--card-bg);
+      box-shadow: var(--bot-shadow);
+      z-index: 9999;
+      display: none;
+      overflow: hidden;
+      transform-origin: bottom right;
+      animation: popIn 0.22s ease;
+    }
+
+    @keyframes popIn {
+      from { transform: scale(0.95); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    .socbot-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--border);
+      gap: 10px;
+    }
+
+    .socbot-title {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .socbot-title .main {
+      font-weight: 900;
+      font-size: 13px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--primary);
+    }
+
+    .socbot-title .sub {
+      font-size: 11px;
+      color: var(--text-gray);
+      font-weight: 700;
+    }
+
+    .socbot-close {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-main);
+      cursor: pointer;
+      border-radius: 10px;
+      padding: 6px 10px;
+      font-weight: 900;
+      font-size: 12px;
+    }
+
+    .socbot-body {
+      height: calc(100% - 52px);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .socbot-chat {
+      flex: 1;
+      padding: 14px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      background: rgba(0,0,0,0.03);
+    }
+
+    .msg-row {
+      display: flex;
+      width: 100%;
+      animation: msgIn 0.18s ease;
+    }
+
+    @keyframes msgIn {
+      from { transform: translateY(6px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    .msg-row.user { justify-content: flex-end; }
+    .msg-row.agent { justify-content: flex-start; }
+
+    .msg-bubble {
+      max-width: 82%;
+      padding: 10px 12px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      font-family: 'Fira Code', monospace;
+      font-size: 13px;
+      line-height: 1.5;
+      white-space: pre-wrap;
+    }
+
+    .msg-row.user .msg-bubble {
+      background: var(--bot-user);
+      border-color: rgba(99, 102, 241, 0.35);
+      border-bottom-right-radius: 6px;
+    }
+
+    .msg-row.agent .msg-bubble {
+      background: var(--bot-agent);
+      border-color: rgba(34, 197, 94, 0.35);
+      border-bottom-left-radius: 6px;
+    }
+
+    .typing {
+      display: inline-flex;
+      gap: 5px;
+      align-items: center;
+    }
+    .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--text-gray);
+      animation: bounce 1s infinite ease-in-out;
+    }
+    .dot:nth-child(2) { animation-delay: 0.15s; }
+    .dot:nth-child(3) { animation-delay: 0.3s; }
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); opacity: 0.5; }
+      50% { transform: translateY(-4px); opacity: 1; }
+    }
+
+    /* Suggestions ABOVE input bar (as you asked) */
+    .socbot-suggestions {
+      padding: 10px 12px 0 12px;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      border-top: 1px solid var(--border);
+      background: rgba(0,0,0,0.02);
+    }
+
+    .socbot-chip {
+      border: 1px solid var(--border);
+      padding: 7px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      cursor: pointer;
+      background: rgba(0,0,0,0.05);
+      color: var(--text-main);
+      user-select: none;
+      font-weight: 800;
+      transition: transform 0.15s ease, border-color 0.15s ease;
+    }
+
+    .socbot-chip:hover {
+      border-color: var(--primary);
+      transform: translateY(-1px);
+    }
+
+    .socbot-input-row {
+      display: flex;
+      gap: 10px;
+      padding: 10px 12px 12px 12px;
+      background: rgba(0,0,0,0.02);
+    }
+
+    .socbot-input-row input {
+      flex: 1;
+      min-width: 120px;
+    }
+
+    .socbot-ask {
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      padding: 10px 12px;
+      cursor: pointer;
+      font-weight: 900;
+      white-space: nowrap;
+      transition: transform 0.15s ease;
+    }
+    .socbot-ask:hover { transform: translateY(-1px); }
+
+    /* Fullscreen on mobile */
+    @media (max-width: 520px) {
+      .socbot-window {
+        right: 10px;
+        left: 10px;
+        bottom: 90px;
+        width: auto;
+        height: 72vh;
+        max-height: calc(100vh - 120px);
+      }
+      .socbot-fab { right: 14px; bottom: 14px; }
+      .dashboard { padding: 18px; }
+    }
+
+    footer {
+      margin-top: 40px;
+      text-align: center;
+      font-size: 12px;
+      color: var(--text-gray);
+      border-top: 1px solid var(--border);
+      padding-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="dashboard">
+  <header>
+    <h1><a href="https://maveera.github.io/SOC-Incident-Analysis/" target="_blank">🛡️ SOC <span>Intelligence</span> Console</a></h1>
+    <div class="header-controls">
+      <button class="btn-reset" onclick="resetConsole()">Reset Console</button>
+      <button class="btn-theme" id="themeToggle">☀️</button>
+    </div>
+  </header>
+
+  <label style="margin-bottom:10px; display:block">🔐 AI Keys & Personnel</label>
+  <div class="grid">
+    <div class="input-group">
+      <label>(Gemini/ChatGPT)</label>
+      <input id="aiKey" type="password" placeholder="Paste Key & Press Enter">
+      <span class="key-toggle" onclick="toggleKeyVisibility('aiKey')" id="toggleAiKey">View</span>
+      <span id="editAi" class="edit-link" onclick="unlockKey('aiKey')">Edit</span>
+    </div>
+
+    <div class="input-group">
+      <label>Customer Name</label>
+      <input id="customerName" type="text" placeholder="e.g. Anand">
+    </div>
+
+    <div class="input-group">
+      <label>Analyst Name</label>
+      <input id="analystName" type="text" placeholder="Your Name">
+    </div>
+
+    <div class="input-group">
+      <label>IT Keys (Optional)</label>
+
+      <div class="ti-wrap">
+        <div class="ti-input-box">
+          <input id="tiKey" type="password" placeholder="Optional Key & Enter">
+          <span class="key-toggle" onclick="toggleKeyVisibility('tiKey')" id="toggleTiKey">View</span>
+          <span id="editTi" class="edit-link" onclick="unlockKey('tiKey')">Edit</span>
+        </div>
+
+        <select id="tiProvider" style="width: 160px;">
+          <option value="abuseipdb">AbuseIPDB</option>
+          <option value="virustotal">VirusTotal</option>
+          <option value="alienvault">AlienVault</option>
+          <option value="providerSite">IT Provider Site</option>
+        </select>
+
+        <button class="btn-open" id="tiOpenBtn" onclick="openTIProviderSite()">Open</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid">
+    <div class="input-group">
+      <label>Incident Rule</label>
+      <select id="incidentType"></select>
+    </div>
+
+    <div class="input-group">
+      <label>AI Provider</label>
+      <select id="aiProvider">
+        <option value="gemini">Google Gemini</option>
+        <option value="openai">OpenAI</option>
+        <option value="claude">Anthropic Claude</option>
+        <option value="cohere">Cohere</option>
+        <option value="mistral">Mistral</option>
+        <option value="groq">Groq</option>
+        <option value="perplexity">Perplexity</option>
+        <option value="azureopenai">Azure OpenAI</option>
+      </select>
+    </div>
+
+    <div class="input-group">
+      <label>Model Selector</label>
+      <select id="modelSelect"></select>
+    </div>
+  </div>
+
+  <div class="input-group">
+    <label>Unmasked RAW Logs</label>
+    <textarea id="rawLogs" placeholder="Paste full logs here..." style="min-height:220px"></textarea>
+  </div>
+
+  <button class="btn btn-main" onclick="runSOCEngine()">🚀 Run Analysis Engine</button>
+
+  <div id="tiSection" class="ti-results"></div>
+
+  <div id="loading">
+    <div class="scanner-bar"></div>
+    <div class="loading-text">Protecting Data & Analyzing...</div>
+  </div>
+
+  <div class="report-area" id="reportSection">
+    <div class="report-content" id="reportContent"></div>
+    <button class="btn btn-main" style="background:#475569" id="copyBtn" onclick="copyReport()">📋 Copy Report</button>
+  </div>
+
+  <footer>© 2026  2026 All Rights Reserved | <a href="https://maveera.tech" target="_blank" style="color:var(--primary); text-decoration:none">Maveera</a></footer>
+</div>
+
+<!-- FLOATING SOC BOT -->
+<button class="socbot-fab" id="socbotFab" onclick="toggleSocBot()">💬</button>
+
+<div class="socbot-window" id="socbotWindow">
+  <div class="socbot-header">
+    <div class="socbot-title">
+      <div class="main">SOC AI Agent</div>
+      <div class="sub">Chatbot based on analysis</div>
+    </div>
+    <button class="socbot-close" onclick="toggleSocBot()">Close</button>
+  </div>
+
+  <div class="socbot-body">
+    <div class="socbot-chat" id="socbotChat"></div>
+
+    <!-- Suggestions moved ABOVE input bar -->
+    <div class="socbot-suggestions" id="socbotSuggestions"></div>
+
+    <div class="socbot-input-row">
+      <input id="socbotQuestion" type="text" placeholder="Ask your SOC question..." />
+      <button class="socbot-ask" onclick="askSocBot()">Ask</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const INCIDENTS = ["No logs from a device", "FortiSIEM Performance Monitoring Relay Not Working", "Multiple Logon Failures:Misc App-Custom", "No performance metrics from a device", "High Process CPU: Server-Custom", "Multiple Logon Failures: Web Server-Custom", "Server Disk Latency - Warning", "Brute Force App Login Success-Custom", "Permitted Traffic from Emerging Threat IP List", "UEBA AI detects unusual process stopped", "UEBA Policy detects removable media write", "Suspicious Logon Failure without following successful login", "FortiSIEM Agent Operational Error", "Multiple Logon Failures: VPN-Custom", "Server Installed Software - Change", "Privilege user account modification - VIP", "Multiple Logon Failures: Same Src and Dest and Multiple Accounts", "Unauthorized Logon to ADCS Servers by Non-Administrators", "Excessive file changes on a host: Potential Ransomware", "Server Installed Software Change", "Windows: Windows Update Error", "FortiSIEM-Agent Operational Error", "FortiGate: Config Change was Detected", "UEBA AI detects unusual file deletion", "Missing a specific performance metric from a device", "UEBA AI detects unusual file reading", "Server Memory - Warning", "UEBA AI detects unusual file creation", "Windows: AD User Enumeration", "Concurrent Failed Authentications To Same Account From Multiple Countries", "Heavy TCP Host Scan On Fixed Port", "UEBA AI detects unusual file writing", "Large Outbound Transfer", "Windows Logging Service Shutdown", "Sudden Decrease in Reported Events From A Host", "Sudden Increase in Successful Logons To A Host", "Windows: Windows Service Terminated With Error", "Office365 - Brute Force Login Attempts - Same User", "Server Down: No Ping Response", "UEBA AI detects unusual process created", "System Collector Event Delayed", "Multiple logon failure on privilege users", "Office365: Brute Force - Login Attempts Same Source", "Large Outbound Transfer To Outside My Country", "High Process CPU - Server", "Windows - User Account Enabled", "Multiple Logon Failures: Misc App", "Server Memory - Critical", "Windows - User Deleted", "Windows - User Password Changed", "Windows - User Created", "Account Locked: Server", "Windows - User Added to Groups", "Windows - User Account Properties Changed", "Windows - User Removed from Groups", "Concurrent Failed Authentications To Same Account From Multiple Cities of the same Country", "Windows: NTLMv1 Logon Between Client and Server", "UEBA Policy detects potential leaver editing a CV at work", "UEBA Policy detects ransomware file types", "UEBA AI detects unusual file reading", "Windows - User Account Disabled", "Sudden Increase in Network Interface Traffic", "Traffic to bogon networks", "Windows - Groups Changed", "Permitted Traffic from FortiGuard Malware IP List", "UEBA AI detects unusual process created", "Brute Force Host Login Success", "Windows - Account Unlocked", "Windows - Removable Media Inserts", "Network Intf Error - Critical", "Windows: Hidden Local User Creation", "Traffic to FortiGuard Malware IP List", "Heavy TCP Host Scan", "UEBA AI detects unusual file renamed", "Server Disk Space - Critical", "Windows: Locked Workstation", "Brute Force - Domain Login Success", "Server CPU - Critical", "Windows: Remote Access Tool Services Have Been Installed - System", "Windows: Remote Access Tool Services Have Been Installed - Security", "Brute Force App Login Success", "Server Intf Error - Critical", "UEBA Policy detects potential pirated media", "Uncommon VPN Login", "Windows: A Member Was Removed From a Security-Enabled Global Group", "Windows: Local User Creation", "UEBA AI detects unusual file download", "UEBA Policy detects suspicious applications", "Sudden Increase In DNS Requests From A Specific Host", "FortiAnalyzer: No logs received from a device in 4 hours", "Ransomware detected on a host", "Sudden Increase in Failed Logons To A Host", "Sudden Increase in Firewall Denied Outbound Traffic To A Specific TCP/UDP port", "Windows: A Member Was Added to a Security-Enabled Global Group", "Excessive End User DNS Queries", "Sudden Increase in Server Process Count", "Heavy UDP Port Scan: Single Host", "MS 365 Defender: Generic Alert", "Windows: Failed Logon From Public IP", "Server Intf Util - Warning", "Group Policy Object Created", "Windows: Possible DC Shadow Attack", "Outbound Permitted Traffic To FortiGuard Malware IP List - FortiGate FW", "Multiple IPS Detected Scans From Same Src", "Outbound insecure protocol traffic from non guest network detected", "Excessive Denied Connections From Same Src", "PH_RULE_O365_AddMemberToRole", "Linux: Kernel Module Modification", "UEBA AI detects unusual file upload", "Server Intf Util - Critical", "Stealth Scan using a tool", "Sudden Increase in Network Interface Errors", "Server Memory - Critical", "Sudden Increase in Firewall Denied Inbound Traffic To A Specific TCP/UDP port", "Windows: Active Directory Replication from Non Machine Account", "ICMP Flood From Same Source", "Windows: Mimikatz DC Sync", "Network Device Down: No ping response", "Server Intf Error - Warning", "User Login Success from other countries - Application", "Windows: Application Uninstalled", "Windows: DPAPI Domain Master Key Backup Attempt", "Windows: External Disk Drive or USB Storage Device", "Linux: Setgid Bit Set via chmod", "Linux: Setuid Bit Set via chmod", "UEBA Policy detects removable media read", "Sudden Increase in User Login Volume", "Windows: Server Paging File Usage - Critical", "Windows - Service Installed By Unusual Client - System", "User added to Administrator Group", "Sudden Change In DNS Data Transfer Pattern From A Specific Host", "FortiGate: Admin User Deleted", "Remote Desktop traffic from Internet", "MS 365 Defender: Incident Triggered", "High Severity MS 365 Defender: Incident Triggered", "Office365: Move To Folder Inbox Rule Created", "Group Policy Object Modified", "Large Outbound Transfer To Outside My Country", "Office365: Brute Force Login Attempts - Same User", "Windows: Add or Remove Computer from DC", "Heavy UDP Host Scan On Fixed Port", "Office365: Suspicious File Type Uploaded", "Server Intf Util - Critical", "Sudden Increase in System Memory Usage", "Inbound insecure protocol traffic detected", "FortiGate: Admin User Added", "Large Inbound Transfer From Outside My Country", "Transient Windows Account Usage", "End User DNS Queries to Unauthorized DNS Servers", "Windows: Unauthorized System Time Modification", "Sudden User Location Change", "Website access - policy violation", "AD Group Modification Detected", "Account created by the privilege users", "License Issues", "Outbound Permitted Traffic To Emerging Threat IP List - FortiGate FW", "Sudden Increase in Outbound Firewall Aggregate Denies", "Windows: Active Directory User Backdoors", "Concurrent Successful Authentications To Same Account From Multiple Cities of the same Country", "Server Degraded: Lossy Ping Response", "Heavy TCP Port Scan: Single Destination", "High Process CPU: Network Device", "VNC traffic from Internet", "High Severity MS 365 Defender Generic Alert", "Multiple Windows Accounts Disabled by Administrator", "Office365: Mailbox SendAs or SendOnBehalf has occurred", "Office365: Set-Mailbox Forwarding Action Created", "Windows: Possible Shadow Credentials Added", "Ransomware outbreak detected", "Windows: SCM Database Handle Failure", "Server Memory - Warning", "Successful Account Activity On a Prior Disabled Account", "Windows: Service Installation in Suspicious Folder", "Linux: Unusual Process Execution from Temp", "MS 365 Defender: Malware Detected", "Suspicious Certificate Template Modifications", "Traffic to Emerging Threat IP List", "Windows: Generic Password Dumper Activity on LSASS", "Windows: Outgoing Logon with New Credentials", "Windows - Service Installed By Unusual Client - Security", "Windows - User Password Changed - VIP", "CheckPoint Harmony - Found Communication from a Malicious IP", "Office365 - Suspicious File Type Uploaded", "User added to Remote Desktop User Group", "Sudden Increase In Firewall Connections", "Azure Resource Group Deleted", "Multiple Logon Failures: Database", "Failed Account Activity On Prior Disabled Account", "Outbreak: FortiManager Command Execution Vulnerability Detected on Device", "Heavy UDP Host Scan", "High Severity Inbound Permitted IPS Exploit", "DoS Attack detected by NIPS", "Office365: Strong Authentication Disabled for a User", "Server Disk Latency - Critical", "SNMP Service Unavailable", "Windows: Tap Driver Installation", "UEBA AI detects unusual file movement", "UEBA Policy detects ransomware note", "MS 365 Defender: Suspicious Activity Detected", "Windows - User Account Name Changed", "Suspicious Certificate Enrollment With Elevated Privileges", "Windows: Replay Attack Detected rule", "Brute Force - Host Logon Failure - Domain Alert", "Windows: Suspicious Service Creation", "Windows: Service Installation in Suspicious Folder - Security", "Windows: Suspicious PowerShell Execution", "Windows: Possible Lateral Movement via Remote Services", "Windows: Remote Service Creation Detected", "Windows: Unusual Scheduled Task Creation", "Windows: Potential Credential Dumping", "Windows: Suspicious LSASS Access", "Windows: Abnormal Process Injection", "Windows: Suspicious WMI Activity", "Windows: Unauthorized Registry Modification", "Windows: Suspicious RDP Session", "Windows: Multiple Failed Logons from Same Source", "Windows: Account Lockout Spike", "Windows: Unusual Admin Group Change", "Windows: Suspicious Group Policy Modification", "Windows: Unauthorized New Local Admin", "Windows: New Service Principal Name Added", "Windows: Kerberos Ticket Anomaly", "Windows: Possible Golden Ticket Attack", "Windows: Possible Silver Ticket Attack", "Windows: Unusual Domain Controller Authentication", "Windows: Suspicious SMB Connection", "Windows: Unusual File Share Access", "Windows: Suspicious File Extension Created", "Windows: Ransomware Behavior Detected", "Windows: High Volume File Encryption Activity", "Windows: Suspicious Defender Exclusion Added", "Windows: Security Tool Disabled", "Windows: Suspicious Audit Policy Change", "Windows: Event Log Cleared", "Windows: Suspicious Firewall Rule Added", "Windows: New Inbound Firewall Rule", "Windows: Unusual Outbound Connection", "Windows: Data Exfiltration Suspected", "Windows: Suspicious DNS Tunneling", "Windows: Unusual Network Beaconing", "Windows: Suspicious HTTP User-Agent", "Windows: TOR Connection Detected", "Windows: Cryptocurrency Miner Detected", "Windows: Unauthorized Software Installed", "Windows: Suspicious MSI Execution", "Windows: Untrusted Driver Installed", "Windows: Kernel Driver Load Anomaly", "Windows: Suspicious Boot Configuration Change", "Windows: Secure Boot Disabled", "Windows: BitLocker Disabled", "Windows: Shadow Copy Deleted", "Windows: Volume Shadow Copy Deletion Attempt", "Windows: RDP Brute Force Attempt", "Windows: Suspicious Remote Desktop Tool", "Windows: Unauthorized Remote Assistance", "Windows: New VPN Connection", "Windows: Unusual Geo Login", "Windows: MFA Disabled", "Windows: Suspicious OAuth App Consent", "Office365: Impossible Travel Detected", "Office365: Suspicious Inbox Rule", "Office365: External Forwarding Enabled", "Office365: New OAuth Application Added", "Office365: Suspicious Admin Activity", "Office365: Mailbox Permission Changed", "Office365: User Added to Privileged Role", "Office365: Legacy Authentication Used", "Office365: Multiple Failed Login Attempts", "Office365: Login From New Device", "Office365: New Country Login", "Office365: Suspicious SharePoint Download", "Office365: Mass File Deletion", "Office365: Mass File Download", "Office365: Suspicious OneDrive Activity", "Azure: Suspicious Role Assignment", "Azure: Resource Deletion Detected", "Azure: Unusual VM Creation", "Azure: Unusual Storage Access", "Azure: Public Blob Access Enabled", "Azure: NSG Rule Modified", "Azure: Unusual Key Vault Access", "Azure: Secret Retrieved from Key Vault", "Azure: Suspicious Sign-in Risk", "Azure: Conditional Access Policy Modified", "Azure: MFA Requirement Disabled", "Azure: New Service Principal Created", "Azure: Privileged Identity Management Activation", "Azure: Unusual API Call Activity"];
+
+const STORAGE_KEYS = { aiKey: 'soc_ai', tiKey: 'soc_ti' };
+let piiStore = new Map();
+
+let lastAnalysisReport = "";
+let lastMaskedLogs = "";
+let lastSelectedRule = "";
+
+const AI_MODELS = {
+  gemini: [
+    { label: "Gemini 2.0 Flash", value: "models/gemini-2.0-flash" },
+    { label: "Gemini 2.0 Pro", value: "models/gemini-2.0-pro" },
+    { label: "Gemini 1.5 Pro", value: "models/gemini-1.5-pro" },
+    { label: "Gemini 1.5 Flash", value: "models/gemini-1.5-flash" },
+    { label: "Gemini 2.5 Flash", value: "models/gemini-2.5-flash" }
+  ],
+  openai: [
+    { label: "gpt-4o", value: "gpt-4o" },
+    { label: "gpt-4.1", value: "gpt-4.1" },
+    { label: "gpt-4.1-mini", value: "gpt-4.1-mini" },
+    { label: "gpt-4o-mini", value: "gpt-4o-mini" }
+  ],
+  claude: [
+    { label: "Claude 3.5 Sonnet", value: "claude-3-5-sonnet-20241022" },
+    { label: "Claude 3.5 Haiku", value: "claude-3-5-haiku-20241022" }
+  ],
+  cohere: [
+    { label: "Command R", value: "command-r" },
+    { label: "Command R+", value: "command-r-plus" }
+  ],
+  mistral: [
+    { label: "Mistral Large", value: "mistral-large-latest" },
+    { label: "Mistral Small", value: "mistral-small-latest" }
+  ],
+  groq: [
+    { label: "Llama 3.1 70B", value: "llama-3.1-70b-versatile" },
+    { label: "Llama 3.1 8B", value: "llama-3.1-8b-instant" }
+  ],
+  perplexity: [
+    { label: "Sonar Large", value: "sonar-large" },
+    { label: "Sonar Small", value: "sonar-small" }
+  ],
+  azureopenai: [
+    { label: "Azure (Deployment Name)", value: "azure-deployment" }
+  ]
+};
+
+window.onload = () => {
+  const iSelect = document.getElementById('incidentType');
+  INCIDENTS.sort().forEach(i => iSelect.innerHTML += `<option value="${i}">${i}</option>`);
+  loadKey('aiKey');
+  loadKey('tiKey');
+  initModelSelector();
+  handleTIProviderUI();
+  bootBotUI();
+};
+
+document.getElementById('themeToggle').onclick = () => {
+  document.body.classList.toggle('light-theme');
+  document.getElementById('themeToggle').textContent = document.body.classList.contains('light-theme') ? '🌙' : '☀️';
+};
+
+document.getElementById('aiProvider').addEventListener('change', initModelSelector);
+document.getElementById('tiProvider').addEventListener('change', handleTIProviderUI);
+
+function initModelSelector() {
+  const provider = document.getElementById('aiProvider').value;
+  const modelSelect = document.getElementById('modelSelect');
+  modelSelect.innerHTML = "";
+  (AI_MODELS[provider] || []).forEach(m => {
+    const opt = document.createElement("option");
+    opt.value = m.value;
+    opt.textContent = m.label;
+    modelSelect.appendChild(opt);
+  });
+}
+
+function handleTIProviderUI() {
+  const provider = document.getElementById('tiProvider').value;
+  const tiKey = document.getElementById('tiKey');
+  const openBtn = document.getElementById('tiOpenBtn');
+  const toggle = document.getElementById('toggleTiKey');
+  const editTi = document.getElementById('editTi');
+
+  if (provider === "providerSite") {
+    tiKey.style.display = "none";
+    openBtn.style.display = "flex";
+    toggle.style.display = "none";
+    editTi.style.display = "none";
+  } else {
+    tiKey.style.display = "block";
+    openBtn.style.display = "none";
+    if (document.getElementById("tiKey").readOnly) {
+      toggle.style.display = "block";
+      editTi.style.display = "block";
+    }
+  }
+}
+
+function openTIProviderSite() {
+  window.open("https://viper-intel.streamlit.app/", "_blank");
+}
+
+function loadKey(id) {
+  const storageKey = (id === 'aiKey') ? STORAGE_KEYS.aiKey : STORAGE_KEYS.tiKey;
+  const val = localStorage.getItem(storageKey);
+  if(val) {
+    const input = document.getElementById(id);
+    input.value = val;
+    input.readOnly = true;
+    const btnId = 'edit' + (id === 'aiKey' ? 'Ai' : 'Ti');
+    document.getElementById(btnId).style.display = 'block';
+    const toggleId = (id === 'aiKey') ? 'toggleAiKey' : 'toggleTiKey';
+    document.getElementById(toggleId).style.display = 'block';
+  }
+}
+
+function lockKey(id) {
+  const input = document.getElementById(id);
+  const val = input.value.trim();
+  if(val.length > 5) {
+    const storageKey = (id === 'aiKey') ? STORAGE_KEYS.aiKey : STORAGE_KEYS.tiKey;
+    localStorage.setItem(storageKey, val);
+    input.readOnly = true;
+    const btnId = 'edit' + (id === 'aiKey' ? 'Ai' : 'Ti');
+    document.getElementById(btnId).style.display = 'block';
+    const toggleId = (id === 'aiKey') ? 'toggleAiKey' : 'toggleTiKey';
+    document.getElementById(toggleId).style.display = 'block';
+  }
+}
+
+function unlockKey(id) {
+  const input = document.getElementById(id);
+  input.readOnly = false;
+  input.value = "";
+  const storageKey = (id === 'aiKey') ? STORAGE_KEYS.aiKey : STORAGE_KEYS.tiKey;
+  localStorage.removeItem(storageKey);
+  const btnId = 'edit' + (id === 'aiKey' ? 'Ai' : 'Ti');
+  document.getElementById(btnId).style.display = 'none';
+  const toggleId = (id === 'aiKey') ? 'toggleAiKey' : 'toggleTiKey';
+  document.getElementById(toggleId).style.display = 'none';
+  input.type = "password";
+  input.focus();
+}
+
+function toggleKeyVisibility(id) {
+  const input = document.getElementById(id);
+  const toggleId = (id === 'aiKey') ? 'toggleAiKey' : 'toggleTiKey';
+  const t = document.getElementById(toggleId);
+  if (input.type === "password") {
+    input.type = "text";
+    t.textContent = "Hide";
+  } else {
+    input.type = "password";
+    t.textContent = "View";
+  }
+}
+
+['aiKey', 'tiKey'].forEach(id => {
+  document.getElementById(id).addEventListener('keydown', (e) => {
+    if(e.key === 'Enter') {
+      e.preventDefault();
+      lockKey(id);
+      if(id === "tiKey") handleTIProviderUI();
+    }
+  });
+});
+
+/* =========================
+   SOC BOT UI / CHAT ENGINE
+   ========================= */
+function toggleSocBot() {
+  const win = document.getElementById("socbotWindow");
+  win.style.display = (win.style.display === "block") ? "none" : "block";
+  if(win.style.display === "block") {
+    setTimeout(() => document.getElementById("socbotQuestion").focus(), 120);
+  }
+}
+
+function bootBotUI() {
+  const chat = document.getElementById("socbotChat");
+  chat.innerHTML = "";
+  addAgentMsg("SOC AI Agent Ready.\nRun Analysis Engine first, then ask questions here.");
+  setDefaultBotSuggestions();
+}
+
+function addUserMsg(text) {
+  const chat = document.getElementById("socbotChat");
+  const row = document.createElement("div");
+  row.className = "msg-row user";
+  const bubble = document.createElement("div");
+  bubble.className = "msg-bubble";
+  bubble.textContent = text;
+  row.appendChild(bubble);
+  chat.appendChild(row);
+  chat.scrollTop = chat.scrollHeight;
+}
+
+function addAgentMsg(text) {
+  const chat = document.getElementById("socbotChat");
+  const row = document.createElement("div");
+  row.className = "msg-row agent";
+  const bubble = document.createElement("div");
+  bubble.className = "msg-bubble";
+  bubble.textContent = text;
+  row.appendChild(bubble);
+  chat.appendChild(row);
+  chat.scrollTop = chat.scrollHeight;
+}
+
+function addTyping() {
+  const chat = document.getElementById("socbotChat");
+  const row = document.createElement("div");
+  row.className = "msg-row agent";
+  row.id = "typingRow";
+  const bubble = document.createElement("div");
+  bubble.className = "msg-bubble";
+  bubble.innerHTML = `<span class="typing"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span>`;
+  row.appendChild(bubble);
+  chat.appendChild(row);
+  chat.scrollTop = chat.scrollHeight;
+}
+
+function removeTyping() {
+  const t = document.getElementById("typingRow");
+  if(t) t.remove();
+}
+
+function setDefaultBotSuggestions() {
+  const sug = [
+    "Is this True Positive or False Positive?",
+    "What is the impact and risk level?",
+    "What immediate actions should we take?",
+    "Which indicators should we block?",
+    "What additional logs are needed?"
+  ];
+  renderBotSuggestions(sug);
+}
+
+function renderBotSuggestions(list) {
+  const box = document.getElementById("socbotSuggestions");
+  box.innerHTML = "";
+  list.forEach(q => {
+    const chip = document.createElement("div");
+    chip.className = "socbot-chip";
+    chip.textContent = q;
+    chip.onclick = () => {
+      document.getElementById("socbotQuestion").value = q;
+      askSocBot();
+    };
+    box.appendChild(chip);
+  });
+}
+
+async function generateRelatedSuggestions(question) {
+  // simple local logic to make suggestions based on question (no extra API call)
+  const q = question.toLowerCase();
+  let sug = [];
+
+  if(q.includes("tp") || q.includes("fp") || q.includes("true") || q.includes("false")) {
+    sug = [
+      "Which log lines confirm malicious activity?",
+      "What indicators support True Positive?",
+      "What indicators support False Positive?",
+      "Any known benign explanation?",
+      "What should we confirm with customer?"
+    ];
+  } else if(q.includes("impact") || q.includes("risk")) {
+    sug = [
+      "What is the worst-case impact?",
+      "Is data exfiltration possible?",
+      "What is the severity (Low/Med/High)?",
+      "What systems/users are affected?",
+      "Is containment required immediately?"
+    ];
+  } else if(q.includes("block") || q.includes("ioc") || q.includes("indicator")) {
+    sug = [
+      "Which IP/Domain/Hash should be blocked?",
+      "Should we block at firewall or EDR?",
+      "Any false positive risk if we block?",
+      "What is the TI reputation result?",
+      "Any related activity in last 7 days?"
+    ];
+  } else if(q.includes("next") || q.includes("action") || q.includes("remed")) {
+    sug = [
+      "What is the first containment step?",
+      "What evidence should we preserve?",
+      "What should we monitor next?",
+      "Any user validation required?",
+      "Should we reset credentials?"
+    ];
+  } else {
+    sug = [
+      "Can you summarize key findings in 3 points?",
+      "What evidence supports the alert?",
+      "What should we ask customer to confirm?",
+      "What additional logs are needed?",
+      "What immediate mitigation is recommended?"
+    ];
+  }
+
+  renderBotSuggestions(sug);
+}
+
+document.getElementById("socbotQuestion").addEventListener("keydown", (e) => {
+  if(e.key === "Enter") {
+    e.preventDefault();
+    askSocBot();
+  }
+});
+
+async function askSocBot() {
+  const aiKey = document.getElementById('aiKey').value.trim();
+  const provider = document.getElementById('aiProvider').value;
+  const model = document.getElementById('modelSelect').value;
+  const question = document.getElementById('socbotQuestion').value.trim();
+
+  if (!aiKey) return alert("AI Key is mandatory.");
+  if (!lastAnalysisReport) return alert("Run Analysis Engine first and come back here.");
+  if (!question) return alert("Please enter a question.");
+
+  addUserMsg(question);
+  document.getElementById('socbotQuestion').value = "";
+  generateRelatedSuggestions(question);
+
+  addTyping();
+
+  const agentPrompt = `You are a SOC AI Agent. Answer strictly based on the analysis output and logs context below.
+Do not use bold markdown (**).
+Be technical, short, and actionable.
+
+Alert/Rule: ${lastSelectedRule}
+
+ANALYSIS OUTPUT:
+${lastAnalysisReport}
+
+MASKED LOGS:
+${lastMaskedLogs}
+
+USER QUESTION:
+${question}
+`;
+
+  try {
+    let answer = "";
+
+    if (provider === "gemini") {
+      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/${model}:generateContent?key=${aiKey}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ contents: [{ parts: [{ text: agentPrompt }] }] })
+      });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error?.message || "API Error");
+      answer = data.candidates?.[0]?.content?.parts?.[0]?.text || "No content.";
+    } else if (provider === "openai") {
+      const response = await fetch('https://api.openai.com/v1/chat/completions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${aiKey}` },
+        body: JSON.stringify({ model: model, messages: [{ role: "user", content: agentPrompt }] })
+      });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error?.message || "API Error");
+      answer = data.choices?.[0]?.message?.content || "No content.";
+    } else {
+      answer = "This provider needs backend proxy (CORS).";
+    }
+
+    removeTyping();
+    addAgentMsg(answer);
+  } catch (e) {
+    removeTyping();
+    addAgentMsg("Error: " + e.message);
+  }
+}
+
+/* =========================
+   TI / MASKING / ANALYSIS
+   ========================= */
+async function checkTI(ips) {
+  const key = document.getElementById('tiKey').value.trim();
+  const provider = document.getElementById('tiProvider').value;
+  const tiBox = document.getElementById('tiSection');
+  tiBox.innerHTML = "<strong>Threat Intel Results:</strong><br>";
+  let found = false;
+
+  if (!key || ips.length === 0) return;
+  if (provider === "providerSite") return;
+
+  for (let ip of ips) {
+    if (/^(10\.|127\.|172\.(1[6-9]|2[0-9]|3[01])\.|192\.168\.)/.test(ip)) continue;
+    try {
+      let score = "N/A", comment = "";
+      if (provider === 'abuseipdb') {
+        const res = await fetch(`https://api.abuseipdb.com/api/v2/check?ipAddress=${ip}`, {
+          headers: { 'Key': key, 'Accept': 'application/json' }
+        });
+        const data = await res.json();
+        score = data.data.abuseConfidenceScore + "%";
+        comment = data.data.isp || "Public IP";
+      } else if (provider === 'virustotal') {
+        const res = await fetch(`https://www.virustotal.com/api/v3/ip_addresses/${ip}`, {
+          headers: { 'x-apikey': key }
+        });
+        const data = await res.json();
+        score = data.data.attributes.last_analysis_stats.malicious + " Engines";
+      }
+      tiBox.innerHTML += `IP: ${ip} | Malicious Score: ${score} | Info: ${comment}<br>`;
+      found = true;
+    } catch (e) { console.error("TI Search Error", e); }
+  }
+  if (found) tiBox.style.display = "block";
+}
+
+function maskLogs(text) {
+  piiStore.clear();
+  let masked = text;
+  const emails = [...new Set(text.match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g) || [])];
+  emails.forEach((email, i) => { const key = `[[MASKED_EMAIL_${i}]]`; piiStore.set(key, email); masked = masked.split(email).join(key); });
+  const ips = [...new Set(text.match(/\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b/g) || [])];
+  ips.forEach((ip, i) => { const key = `[[MASKED_IP_${i}]]`; piiStore.set(key, ip); masked = masked.split(ip).join(key); });
+  return { masked, ips };
+}
+
+function unmaskReport(text) {
+  let output = text;
+  piiStore.forEach((val, key) => { output = output.split(key).join(val); });
+  return output;
+}
+
+async function runSOCEngine() {
+  const logs = document.getElementById('rawLogs').value.trim();
+  const rule = document.getElementById('incidentType').value;
+  const aiKey = document.getElementById('aiKey').value.trim();
+  const model = document.getElementById('modelSelect').value;
+  const cust = document.getElementById('customerName').value.trim() || "Customer";
+  const analyst = document.getElementById('analystName').value.trim() || "SOC Analyst";
+  const loader = document.getElementById('loading');
+  const provider = document.getElementById('aiProvider').value;
+
+  if (!logs || !aiKey) return alert("Logs and AI Key are mandatory.");
+  loader.style.display = 'flex';
+  document.getElementById('reportSection').style.display = 'none';
+  document.getElementById('tiSection').style.display = 'none';
+
+  const { masked, ips } = maskLogs(logs);
+
+  if(document.getElementById('tiKey').value.trim() && document.getElementById('tiProvider').value !== "providerSite") {
+    await checkTI(ips);
+  }
+
+  const prompt = `Act as a SOC analyst. Generate a technical incident email notification.
+  Greeting: Hello ${cust},
+  Alert Title: We have received an alert titled “${rule}.” 
+
+  Format:
+  Details:
+  Host Name: [Extract]
+  User: [Extract]
+  (Extract other technical details like Process, Path, etc.)
+
+  Observation:
+  (Simple, technical paragraph explaining findings from logs.)
+
+  Impact:
+  (Security risk assessment)
+
+  Recommended Actions:
+  (List actionable remediation steps)
+
+  RAW Log:
+  ${logs}
+
+  Classification: [TP or FP? Explain briefly.]
+
+  Regards,
+  SOC Team
+  ${analyst}
+
+  RULES: DO NOT USE BOLD MARKDOWN (**) IN THE RESPONSE. DO NOT ADD HEADINGS LIKE "Raw Log Analysis". 
+
+  LOG DATA FOR ANALYSIS: ${masked}`;
+
+  try {
+    let response;
+
+    if(provider === "gemini") {
+      response = await fetch(`https://generativelanguage.googleapis.com/v1beta/${model}:generateContent?key=${aiKey}`, {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
+      });
+    } else if(provider === "openai") {
+      response = await fetch('https://api.openai.com/v1/chat/completions', {
+        method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${aiKey}` },
+        body: JSON.stringify({ model: model, messages: [{ role: "user", content: prompt }] })
+      });
+    } else {
+      throw new Error("This provider needs backend proxy (CORS).");
+    }
+
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.error?.message || "API Error");
+
+    let result = "";
+    if (provider === "gemini") {
+      result = data.candidates?.[0]?.content?.parts?.[0]?.text || "No content.";
+    } else {
+      result = data.choices?.[0]?.message?.content || "No content.";
+    }
+
+    const finalReport = unmaskReport(result);
+
+    document.getElementById('reportContent').innerText = finalReport;
+    document.getElementById('reportSection').style.display = 'block';
+
+    lastAnalysisReport = finalReport;
+    lastMaskedLogs = masked;
+    lastSelectedRule = rule;
+
+    document.getElementById("socbotWindow").style.display = "block";
+    document.getElementById("socbotChat").innerHTML = "";
+    addAgentMsg("Analysis completed. Ask your SOC questions now.");
+    setDefaultBotSuggestions();
+
+  } catch(e) {
+    alert("Error: " + e.message);
+  } finally {
+    loader.style.display = 'none';
+  }
+}
+
+function resetConsole() {
+  document.getElementById('rawLogs').value = "";
+  document.getElementById('customerName').value = "";
+  document.getElementById('analystName').value = "";
+
+  document.getElementById('reportSection').style.display = 'none';
+  document.getElementById('tiSection').style.display = 'none';
+
+  piiStore.clear();
+
+  lastAnalysisReport = "";
+  lastMaskedLogs = "";
+  lastSelectedRule = "";
+
+  bootBotUI();
+}
+
+function copyReport() {
+  const reportContent = document.getElementById('reportContent');
+  const textArea = document.createElement("textarea");
+  textArea.value = reportContent.innerText;
+  document.body.appendChild(textArea);
+  textArea.select();
+  try {
+    document.execCommand('copy');
+    alert("Copied to clipboard!");
+  } catch (err) {
+    console.error('Copy failed', err);
+  }
+  document.body.removeChild(textArea);
+}
+</script>
+</body>
+</html>
