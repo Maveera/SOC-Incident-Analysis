@@ -1,58 +1,73 @@
-# SOC Incident Analysis Tool
+# SOC Intelligence Console
 
-A web-based tool designed to assist Security Operations Center (SOC) analysts in analyzing, masking, and reporting on security incidents. This application provides an interface to process security logs, sanitize sensitive configuration data, and generate standardized event analysis reports.
+Web-based SOC assistant for incident triage, log analysis, TI enrichment, and AI-generated customer-ready draft reports.
 
-## 🚀 Features
+## Live Demo
 
-- **Log Analysis**: Input raw security logs for parsing and review.
-- **Data Masking**: Automatically detects and masks sensitive information (like API keys, passwords, and IP addresses) from logs to ensure safe sharing.
-- **AI-Powered Insights**: (Optional) Integration with AI models to provide automated analysis and summary of the incident logs.
-- **Report Generation**: Generates formatted HTML reports suitable for ticketing systems or stakeholder communication.
-- **Template-Based Fallback**: Includes standard templates for manual filling if AI analysis is unavailable.
+- [SOC Intelligence Console](https://maveera.github.io/SOC-Incident-Analysis/)
 
-## 🛠️ Technologies Used
+## Features
 
-- **HTML5**: semantic structure for the application.
-- **CSS3**: Custom styling for the dark/light mode interface.
-- **JavaScript (ES6+)**: Client-side logic for log processing and masking.
+- **AI analysis workflow** with provider/model selection (Gemini/OpenAI and placeholders for other providers).
+- **Incident rule selector** with searchable incident catalog.
+- **Raw log processing** with masking/unmasking pipeline for sensitive data.
+- **Threat intel enrichment** for public IPs using AbuseIPDB and VirusTotal.
+- **Run validation UX** with inline status messages and disabled run button until required inputs are present.
+- **Progress stepper** during execution: Masking -> TI -> AI -> Report.
+- **Structured report rendering** into ordered sections:
+  - Details
+  - Observation
+  - Impact
+  - Recommended Action
+  - RAW LOG
+  - Classification
+  - Regards
+- **Copy Email Draft button** in Results section to copy customer-facing draft content.
+- **Theme toggle** and improved responsive card-based layout.
 
-## 📦 Installation & Usage
+## Tech Stack
 
-Since this is a client-side web application, no server installation is required.
+- **HTML5**
+- **CSS3**
+- **Vanilla JavaScript (ES6+)**
+- **Direct API calls** to:
+  - Google Gemini API
+  - OpenAI Chat Completions API
+  - AbuseIPDB API
+  - VirusTotal API
 
-1.  **Clone the repository:**
-    ```bash
-    git clone [https://github.com/maveera/soc-incident-analysis-tool.git] or Live: https://maveera.github.io/SOC-Incident-Analysis
-    cd soc-incident-analysis-tool
-    ```
+## Local Setup
 
-2.  **Run the Application:**
-    - Simply open the `Updateindex.html` file in any modern web browser.
-    - *Optional*: For a better development experience, you can serve it using a local server (e.g., Live Server in VS Code or Python `http.server`).
+```bash
+git clone https://github.com/maveera/SOC-Incident-Analysis.git
+cd SOC-Incident-Analysis
+```
 
-    ```bash
-    # Example using Python
-    python -m http.server 8000
-    # Then navigate to http://localhost:8000/Updateindex.html
-    ```
+Run with any static host (recommended):
 
-## 📖 How to Use
+```bash
+python -m http.server 5500
+```
 
-1.  **Paste Logs**: Copy raw text or logs into the designated input area.
-2.  **Analyze**: Click the "Analyze" or "Process" button to trigger the masking and analysis logic.
-3.  **Review**: Check the output section for the sanitized log and the generated analysis report.
-4.  **Export**: Use the "Copy to Clipboard" or "Save Report" button to use the data in your official reports.
+Then open:
 
-## 🤝 Contributing
+- `http://localhost:5500/index.html`
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+## Usage
 
-1.  Fork the project
-2.  Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3.  Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4.  Push to the branch (`git push origin feature/AmazingFeature`)
-5.  Open a Pull Request
+1. Enter AI key and (optionally) customer + analyst names.
+2. Select incident rule, AI provider, and model.
+3. Paste unmasked raw logs.
+4. Click **Run Analysis Engine**.
+5. Review TI + structured output in **Results**.
+6. Click **Copy Email Draft** to copy the customer-ready draft.
 
-## 📄 License
+## Notes
 
-Distributed under the MIT License. See `LICENSE` for more information.
+- For providers other than Gemini/OpenAI, backend proxy/CORS handling may be required.
+- Large logs can affect model latency and token limits.
+- Keep keys private; keys are stored in browser local storage for convenience.
+
+## License
+
+Distributed under the MIT License. See `LICENSE` for details.
