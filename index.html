@@ -878,7 +878,7 @@
   <section class="section-card">
     <div class="section-header">
       <div class="section-title">Results</div>
-      <button class="btn-copy-mini" id="copyEmailBtn" onclick="copyEmailDraft()">📧 Copy Email Draft</button>
+      <button class="btn-copy-mini" id="copyEmailBtn" onclick="copyEmailDraft()">📧 Copy Full Analysis + RAW LOG</button>
     </div>
     <div id="tiSection" class="ti-results"></div>
 
@@ -931,8 +931,10 @@ let lastAnalysisReport = "";
 let lastMaskedLogs = "";
 let lastSelectedRule = "";
 let lastEmailDraft = "";
+let lastAnalysisSections = null;
 const REPORT_ORDER = ["Details", "Observation", "Impact", "Recommended Action", "RAW LOG", "Classification", "Regards"];
-const EMAIL_COPY_ORDER = ["Details", "Observation", "Impact", "Recommended Action", "Classification", "Regards"];
+const EMAIL_COPY_ORDER = ["Details", "Observation", "Impact", "Recommended Action", "RAW LOG", "Classification"];
+const ANALYSIS_COPY_ORDER = ["Details", "Observation", "Recommended Action", "Impact", "Classification", "RAW LOG"];
 
 function setupIncidentRuleCombo() {
   const input = document.getElementById('incidentType');
@@ -1162,7 +1164,7 @@ function renderReportStructured(report, rawLogs) {
     intro,
     ...EMAIL_COPY_ORDER.map(section => `${section}:\n${sections[section].join('\n').trim()}`)
   ].filter(Boolean).join('\n\n');
-  return { orderedText, emailBody };
+  return { orderedText, emailBody, sections };
 }
 
 function initModelSelector() {
@@ -1631,6 +1633,7 @@ async function runSOCEngine() {
 
     lastAnalysisReport = rendered.orderedText;
     lastEmailDraft = rendered.emailBody;
+    lastAnalysisSections = rendered.sections;
     lastMaskedLogs = masked;
     lastSelectedRule = rule;
     setProgressStep("report", true);
@@ -1664,6 +1667,7 @@ function resetConsole() {
 
   lastAnalysisReport = "";
   lastEmailDraft = "";
+  lastAnalysisSections = null;
   lastMaskedLogs = "";
   lastSelectedRule = "";
 
@@ -1672,9 +1676,15 @@ function resetConsole() {
 }
 
 function copyReport() {
-  const reportContent = document.getElementById('reportContent');
+  if (!lastAnalysisSections) {
+    alert("Run Analysis Engine first to generate analysis report.");
+    return;
+  }
+  const textToCopy = ANALYSIS_COPY_ORDER
+    .map(section => `${section}:\n${(lastAnalysisSections[section] || []).join('\n').trim() || "Not provided."}`)
+    .join('\n\n');
   const textArea = document.createElement("textarea");
-  textArea.value = reportContent.innerText;
+  textArea.value = textToCopy;
   document.body.appendChild(textArea);
   textArea.select();
   try {
@@ -1697,7 +1707,7 @@ function copyEmailDraft() {
   textArea.select();
   try {
     document.execCommand('copy');
-    alert("Email draft copied!");
+    alert("Full analysis + RAW LOG copied!");
   } catch (err) {
     console.error('Copy failed', err);
   }

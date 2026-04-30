@@ -22,7 +22,8 @@ Web-based SOC assistant for incident triage, log analysis, TI enrichment, and AI
   - RAW LOG
   - Classification
   - Regards
-- **Copy Email Draft button** in Results section to copy customer-facing draft content.
+- **Copy Full Analysis + RAW LOG button** in Results section to copy structured analysis sections with original input raw logs.
+- **Copy output formatting** prioritizes operational sections (Details, Observation, Recommended Action, Impact, Classification, RAW LOG) and excludes the Regards block from copied content.
 - **Theme toggle** and improved responsive card-based layout.
 
 ## Tech Stack
@@ -60,7 +61,7 @@ Then open:
 3. Paste unmasked raw logs.
 4. Click **Run Analysis Engine**.
 5. Review TI + structured output in **Results**.
-6. Click **Copy Email Draft** to copy the customer-ready draft.
+6. Click **Copy Full Analysis + RAW LOG** to copy the structured analysis output with raw logs.
 
 ## Notes
 
